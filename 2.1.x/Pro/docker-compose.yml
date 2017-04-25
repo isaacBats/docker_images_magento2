@@ -1,0 +1,79 @@
+web:
+    image: icebrick.pengostores.mx:4567/magento2/images:webpro
+    ports:
+        - 80:80
+    volumes:
+        - ./src:/var/www/html
+        - ./etc/nginx/ssl:/etc/nginx/ssl
+       # - ./etc/nginx/sites-available/:/etc/nginx/sites-available/
+        - ./log/nginx:/var/log/nginx
+        - ./log/php:/var/log/php-fpm
+       # - ./log/magento/:/var/www/html/var/log/
+        - ./redis:/redis/data
+        - ./build:/build/
+    environment:
+        - MAGENTO_USER=magento2
+        - MAGENTO_DEPLOY_MODE=developer
+        - MAGENTO_REPO_PUBLIC_KEY=2d6040b5384fca8a83388639194a9030
+        - MAGENTO_REPO_PRIVATE_KEY=63f1690d868495884ab274bcef884f0b
+        - MAGENTO_BASE_URL=http://magento2pro.pengostores.mx/
+        - MAGENTO_BACKEND_FRONTNAME=adminpro
+        - MAGENTO_TIMEZONE=America/Mexico_City
+        - MAGENTO_CURRENCY=MXN
+        - MAGENTO_LANGUAGE=es_MX
+        - MAGENTO_DB_HOST=mysql
+        - MAGENTO_DB_USERNAME=root
+        - MAGENTO_DB_PASSWORD=mysql
+        - MAGENTO_DB_NAME=magento2
+        - MAGENTO_ADMIN_USER=pengo
+        - MAGENTO_ADMIN_PASSWORD=p3ng023#
+        - MAGENTO_ADMIN_EMAIL=svchumboldt@pengostores.com
+        - PENGO_REPO_PUBLIC_KEY="236573746120657320756e6120636c617665206c6172676123"
+        - SERVER_NAME=localhost
+        - WEBSERVER_USER=www-data
+        - PHP_MEMORY_LIMIT=4G
+        - PHP_MAXEXECUTION_TIME=18000
+        - PHP_SESSION_AUTO_START=off
+        - PHP_ZLIB_OUTPUT_COMPRESSION=on
+        - PHP_TIME_ZONE=America/Mexico_City
+        - SUHOSIN_SESSION_CRYPTUA=off
+        - PHP_DISPLAY_ERRORS=Off
+        - PHP_OPCACHE_REVALIDATE_FREQ=10
+        - CONF_REQUEST_TERMINATE_TIMEOUT=300
+        - PHP_UPLOAD_MAX_FILESIZE=100M
+        - PHP_POST_MAX_SIZE=100M
+        - PHP_HOST=127.0.0.1
+        - PHP_PORT=9000
+        - PHP_PM_VAR=dynamic
+        - PHP_PM_MAX_CHILDREN=10
+        - PHP_PM_START_SERVERS=4
+        - PHP_PM_MIN_SPARE_SERVERS=1
+        - PHP_PM_MAX_SPARE_SERVERS=5
+        - NGINX_FASTCGI_READ_TIMEOUT=3000        
+        - NGINX_CLIENT_MAX_BODY_SIZE=100M
+        - SSL_NAME_CRT=common.crt
+        - SSL_NAME_KEY=common.key
+        - REDIS_MAX_MEMORY=#    
+    links:
+        - mysql
+    #container_name: magento2webpro
+    restart: always
+
+mysql:
+    image: mysql:5.7
+    volumes:
+        - ./db:/var/lib/mysql
+        - ./build:/build/
+        - ./sql:/docker-entrypoint-initdb.d/
+        - ./log/mysql:/var/log/mysql/
+    ports:
+      - 3306:3306
+    environment:
+        - MYSQL_ROOT_PASSWORD=mysql
+        - MYSQL_DATABASE=magento2
+        - MYSQL_USER=magento2
+        - MYSQL_PASSWORD=@Mag3nto2
+        - MYSQL_INNODB_BUFFER_POOL_SIZE=134217728 
+        - MYSQL_INNODB_THREAD_CONCURRENCY=0
+    #container_name: mysql
+    restart: always
