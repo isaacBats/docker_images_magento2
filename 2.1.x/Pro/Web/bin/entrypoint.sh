@@ -29,8 +29,13 @@
 [ ! -z "${MAGENTO_DEPLOY_MODE}" ] && sed -i "s/MAGENTO_DEPLOY_MODE/${MAGENTO_DEPLOY_MODE}/" /etc/nginx/conf.d/default.conf 
 [ ! -z "${NGINX_FASTCGI_READ_TIMEOUT}" ] && sed -i "s/NGINX_FASTCGI_READ_TIMEOUT/${NGINX_FASTCGI_READ_TIMEOUT}/" /etc/nginx/conf.d/default.conf 
 [ ! -z "${NGINX_CLIENT_MAX_BODY_SIZE}" ] && sed -i "s/NGINX_CLIENT_MAX_BODY_SIZE/${NGINX_CLIENT_MAX_BODY_SIZE}/" /etc/nginx/conf.d/default.conf 
+[ ! -z "${NGINX_KEEPALIVE_TIMEOUT}" ] && sed -i "s/NGINX_KEEPALIVE_TIMEOUT/${NGINX_KEEPALIVE_TIMEOUT}/" /etc/nginx/conf.d/default.conf
 [ ! -z "${SSL_NAME_CRT}" ] && sed -i "s/SSL_NAME_CRT/${SSL_NAME_CRT}/" /etc/nginx/conf.d/default.conf
 [ ! -z "${SSL_NAME_KEY}" ] && sed -i "s/SSL_NAME_KEY/${SSL_NAME_KEY}/" /etc/nginx/conf.d/default.conf
+[ ! -z "${SSL_PROTOCOLS}" ] && sed -i "s/SSL_PROTOCOLS/${SSL_PROTOCOLS}/" /etc/nginx/conf.d/default.conf
+[ ! -z "${SSL_CIPHERS}" ] && sed -i "s/SSL_CIPHERS/${SSL_CIPHERS}/" /etc/nginx/conf.d/default.conf
+[ ! -z "${SSL_SESSION_CACHE}" ] && sed -i "s/SSL_SESSION_CACHE/${SSL_SESSION_CACHE}/" /etc/nginx/conf.d/default.conf
+[ ! -z "${SSL_SESSION_TIMEOUT}" ] && sed -i "s/SSL_SESSION_TIMEOUT/${SSL_SESSION_TIMEOUT}/" /etc/nginx/conf.d/default.conf
 # magento.repo
 [ ! -z "${MAGENTO_REPO_PUBLIC_KEY}" ] && sed -i "s/MAGENTO_REPO_PUBLIC_KEY/${MAGENTO_REPO_PUBLIC_KEY}/" /root/.composer/auth.json
 [ ! -z "${MAGENTO_REPO_PRIVATE_KEY}" ] && sed -i "s/MAGENTO_REPO_PRIVATE_KEY/${MAGENTO_REPO_PRIVATE_KEY}/" /root/.composer/auth.json

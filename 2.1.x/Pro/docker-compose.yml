@@ -51,8 +51,13 @@ web:
         - PHP_PM_MAX_SPARE_SERVERS=5
         - NGINX_FASTCGI_READ_TIMEOUT=3000        
         - NGINX_CLIENT_MAX_BODY_SIZE=100M
+        - NGINX_KEEPALIVE_TIMEOUT=300s
         - SSL_NAME_CRT=common.crt
         - SSL_NAME_KEY=common.key
+        - SSL_PROTOCOLS=TLSv1.1 TLSv1.2
+        - SSL_CIPHERS=AES128+EECDH:AES128+EDH:!aNULL
+        - SSL_SESSION_CACHE=shared:SSL:10m
+        - SSL_SESSION_TIMEOUT=24h
         - REDIS_MAX_MEMORY=#    
     links:
         - mysql
