@@ -5,6 +5,7 @@
 [ ! -z "${PHP_MAXEXECUTION_TIME}" ] && sed -i "s/PHP_MAXEXECUTION_TIME/${PHP_MAXEXECUTION_TIME}/" /usr/local/etc/php/php.ini
 [ ! -z "${PHP_UPLOAD_MAX_FILESIZE}" ] && sed -i "s/PHP_UPLOAD_MAX_FILESIZE/${PHP_UPLOAD_MAX_FILESIZE}/" /usr/local/etc/php/php.ini
 [ ! -z "${PHP_POST_MAX_SIZE}" ] && sed -i "s/PHP_POST_MAX_SIZE/${PHP_POST_MAX_SIZE}/" /usr/local/etc/php/php.ini
+[ ! -z "${PHP_MAX_IMPUT_VARS}" ] && sed -i "s/PHP_MAX_IMPUT_VARS/${PHP_MAX_IMPUT_VARS}/" /usr/local/etc/php/php.ini
 [ ! -z "${PHP_SESSION_AUTO_START}" ] && sed -i "s/PHP_SESSION_AUTO_START/${PHP_SESSION_AUTO_START}/" /usr/local/etc/php/php.ini
 [ ! -z "${PHP_ZLIB_OUTPUT_COMPRESSION}" ] && sed -i "s/PHP_ZLIB_OUTPUT_COMPRESSION/${PHP_ZLIB_OUTPUT_COMPRESSION}/" /usr/local/etc/php/php.ini
 [ ! -z "${PHP_TIME_ZONE}" ] && sed -i "s/PHP_TIME_ZONE/${PHP_TIME_ZONE}/" /usr/local/etc/php/php.ini

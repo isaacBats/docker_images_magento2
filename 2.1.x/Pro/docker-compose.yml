@@ -42,6 +42,7 @@ web:
         - CONF_REQUEST_TERMINATE_TIMEOUT=300
         - PHP_UPLOAD_MAX_FILESIZE=100M
         - PHP_POST_MAX_SIZE=100M
+        - PHP_MAX_IMPUT_VARS=10000
         - PHP_HOST=127.0.0.1
         - PHP_PORT=9000
         - PHP_PM_VAR=dynamic
