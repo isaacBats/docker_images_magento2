@@ -32,6 +32,7 @@ ENV WEBSERVER_USER="www-data"
 ENV NGINX_FASTCGI_READ_TIMEOUT="300"
 ENV NGINX_CLIENT_MAX_BODY_SIZE="100M"
 ENV NGINX_KEEPALIVE_TIMEOUT="300s"
+ENV NGINX_PORT="8080"
 
 ENV SSL_NAME_CRT="common.crt"
 ENV SSL_NAME_KEY="common.key"
@@ -61,6 +62,9 @@ ENV PHP_PM_MAX_SPARE_SERVERS="5"
 ENV SUHOSIN_SESSION_CRYPTUA="off"
 
 ENV REDIS_MAX_MEMORY="# maxmemory <bytes>"
+
+ENV VARNISHD_CACHE_SIZE="1G"
+ENV VARNISHD_PARAMS="-p default_ttl=3600 -p default_grace=3600"
 
 WORKDIR /tmp
 
@@ -96,42 +100,48 @@ RUN apt-get update && apt-get install -y \
     erlang-nox \
     logrotate \
     socat \
+    net-tools \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir /build/ \
     
-    ## PHP
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-configure hash --with-mhash \
-    && docker-php-ext-configure opcache --enable-opcache \
-    && docker-php-ext-install -j$(nproc) mcrypt mbstring intl xsl gd zip pdo_mysql opcache soap bcmath json iconv \
-    && docker-php-ext-install bcmath \
     
-    ## Composer
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && rm -rf /usr/local/etc/php-fpm.d/* 
+## PHP
+&& docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+&& docker-php-ext-configure hash --with-mhash \
+&& docker-php-ext-configure opcache --enable-opcache \
+&& docker-php-ext-install -j$(nproc) mcrypt mbstring intl xsl gd zip pdo_mysql opcache soap bcmath json iconv \
+&& docker-php-ext-install bcmath \
+    
+## Composer
+&& curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+&& rm -rf /usr/local/etc/php-fpm.d/* 
            
-    ## Git
-    RUN wget https://www.kernel.org/pub/software/scm/git/git-2.9.2.tar.gz
-    RUN tar -xzf git-2.9.2.tar.gz
-    RUN cd /tmp/git-2.9.2 && make configure && ./configure --prefix=/usr/local && make install
+## Git
+RUN wget https://www.kernel.org/pub/software/scm/git/git-2.9.2.tar.gz
+RUN tar -xzf git-2.9.2.tar.gz
+RUN cd /tmp/git-2.9.2 && make configure && ./configure --prefix=/usr/local && make install
     
-    ## Nginx
-    COPY keys/nginx_signing.key /tmp/
-    RUN echo "deb http://nginx.org/packages/mainline/debian/ jessie nginx" >> /etc/apt/sources.list \
-        && echo "deb-src http://nginx.org/packages/mainline/debian/ jessie nginx" >> /etc/apt/sources.list \
-        && apt-key add nginx_signing.key && apt-get clean && apt-get update && apt-get install -y nginx \
-        && mkdir -p /etc/nginx/sites-available/ \ 
-        && rm /etc/nginx/nginx.conf \
-        && rm /etc/nginx/conf.d/default.conf
+## Nginx
+COPY keys/nginx_signing.key /tmp/
+RUN echo "deb http://nginx.org/packages/mainline/debian/ jessie nginx" >> /etc/apt/sources.list \
+    && echo "deb-src http://nginx.org/packages/mainline/debian/ jessie nginx" >> /etc/apt/sources.list \
+    && apt-key add nginx_signing.key && apt-get clean && apt-get update && apt-get install -y nginx \
+    && mkdir -p /etc/nginx/sites-available/ \ 
+    && rm /etc/nginx/nginx.conf \
+    && rm /etc/nginx/conf.d/default.conf
     
-    ## Redis
-    #RUN RUN groupadd -r redis && useradd -r -g redis redis
-    RUN wget http://download.redis.io/redis-stable.tar.gz \
-        && tar xzf redis-stable.tar.gz \
-        && cd redis-stable \
-        && make && make test && make install \
-        && mkdir -p /redis/data
-   
+## Redis
+#RUN RUN groupadd -r redis && useradd -r -g redis redis
+RUN wget http://download.redis.io/redis-stable.tar.gz \
+    && tar xzf redis-stable.tar.gz \
+    && cd redis-stable \
+    && make && make test && make install \
+    && mkdir -p /redis/data
+
+## Varnish
+RUN apt-get update && RUNLEVEL=1 apt-get install -y varnish && rm /etc/varnish/default.vcl
+COPY conf/default.vcl /etc/varnish/
+     
 # PHP config
 COPY conf/php.ini /usr/local/etc/php/
 
@@ -170,7 +180,7 @@ COPY conf/supervisord.conf /etc/supervisord.conf
 # entrypoint
 COPY bin/entrypoint.sh /usr/local/bin/
 
-EXPOSE 22 80 443 9000 6379 5000 44100
+EXPOSE 22 80 8080 443 9000 6379 5000 44100
 WORKDIR /var/www/html
 USER root
 

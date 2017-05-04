@@ -2,6 +2,8 @@ web:
     image: icebrick.pengostores.mx:4567/magento2/images:webpro
     ports:
         - 80:80
+        - 8080:8080
+        - 443:443
     volumes:
         - ./src:/var/www/html
         - ./etc/nginx/ssl:/etc/nginx/ssl
@@ -53,6 +55,7 @@ web:
         - NGINX_FASTCGI_READ_TIMEOUT=3000        
         - NGINX_CLIENT_MAX_BODY_SIZE=100M
         - NGINX_KEEPALIVE_TIMEOUT=300s
+        - NGINX_PORT=8080    
         - SSL_NAME_CRT=common.crt
         - SSL_NAME_KEY=common.key
         - SSL_PROTOCOLS=TLSv1.1 TLSv1.2
@@ -60,6 +63,8 @@ web:
         - SSL_SESSION_CACHE=shared:SSL:10m
         - SSL_SESSION_TIMEOUT=24h
         - REDIS_MAX_MEMORY=#    
+        - VARNISHD_CACHE_SIZE=1G    
+        - VARNISHD_PARAMS=-p default_ttl=3600 -p default_grace=3600   
     links:
         - mysql
     #container_name: magento2webpro

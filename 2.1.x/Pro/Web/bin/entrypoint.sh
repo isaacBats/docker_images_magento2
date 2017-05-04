@@ -31,6 +31,7 @@
 [ ! -z "${NGINX_FASTCGI_READ_TIMEOUT}" ] && sed -i "s/NGINX_FASTCGI_READ_TIMEOUT/${NGINX_FASTCGI_READ_TIMEOUT}/" /etc/nginx/conf.d/default.conf 
 [ ! -z "${NGINX_CLIENT_MAX_BODY_SIZE}" ] && sed -i "s/NGINX_CLIENT_MAX_BODY_SIZE/${NGINX_CLIENT_MAX_BODY_SIZE}/" /etc/nginx/conf.d/default.conf 
 [ ! -z "${NGINX_KEEPALIVE_TIMEOUT}" ] && sed -i "s/NGINX_KEEPALIVE_TIMEOUT/${NGINX_KEEPALIVE_TIMEOUT}/" /etc/nginx/conf.d/default.conf
+[ ! -z "${NGINX_PORT}" ] && sed -i "s/NGINX_PORT/${NGINX_PORT}/" /etc/nginx/conf.d/default.conf
 [ ! -z "${SSL_NAME_CRT}" ] && sed -i "s/SSL_NAME_CRT/${SSL_NAME_CRT}/" /etc/nginx/conf.d/default.conf
 [ ! -z "${SSL_NAME_KEY}" ] && sed -i "s/SSL_NAME_KEY/${SSL_NAME_KEY}/" /etc/nginx/conf.d/default.conf
 [ ! -z "${SSL_PROTOCOLS}" ] && sed -i "s/SSL_PROTOCOLS/${SSL_PROTOCOLS}/" /etc/nginx/conf.d/default.conf
@@ -44,7 +45,12 @@
 [ ! -z "${PENGO_REPO_PUBLIC_KEY}" ] && sed -i "s/PENGO_REPO_PUBLIC_KEY/${PENGO_REPO_PUBLIC_KEY}/" /root/.composer/auth.json
 # redis
 [ ! -z "${REDIS_MAX_MEMORY}" ] && sed -i "s/REDIS_MAX_MEMORY/${REDIS_MAX_MEMORY}/" /etc/redis/redis.conf
-
-export PATH=$PATH:/var/www/html/bin
+# varnish
+[ ! -z "${NGINX_PORT}" ] && sed -i "s/NGINX_PORT/${NGINX_PORT}/" /etc/varnish/default.vcl
+# supervisor
+[ ! -z "${VARNISHD_CACHE_SIZE}" ] && sed -i "s/VARNISHD_CACHE_SIZE/${VARNISHD_CACHE_SIZE}/" /etc/supervisord.conf
+[ ! -z "${VARNISHD_PARAMS}" ] && sed -i "s/VARNISHD_PARAMS/${VARNISHD_PARAMS}/" /etc/supervisord.conf
 
 supervisord -n -c /etc/supervisord.conf
+
+export PATH=$PATH:/var/www/html/bin
