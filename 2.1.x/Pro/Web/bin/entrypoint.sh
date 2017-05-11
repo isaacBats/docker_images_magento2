@@ -46,6 +46,7 @@ export PATH=$PATH:/var/www/html/bin
 [ ! -z "${MAGENTO_REPO_PRIVATE_KEY}" ] && sed -i "s/MAGENTO_REPO_PRIVATE_KEY/${MAGENTO_REPO_PRIVATE_KEY}/" /root/.composer/auth.json
 ### pengo.repo
 [ ! -z "${PENGO_REPO_PUBLIC_KEY}" ] && sed -i "s/PENGO_REPO_PUBLIC_KEY/${PENGO_REPO_PUBLIC_KEY}/" /root/.composer/auth.json
+[ ! -z "${MAGENTO_VERSION}" ] && sed -i "s/MAGENTO_VERSION/${MAGENTO_VERSION}/" /root/m2install.sh
 ### redis
 [ ! -z "${REDIS_MAX_MEMORY}" ] && sed -i "s/REDIS_MAX_MEMORY/${REDIS_MAX_MEMORY}/" /etc/redis/redis.conf
 ### varnish
