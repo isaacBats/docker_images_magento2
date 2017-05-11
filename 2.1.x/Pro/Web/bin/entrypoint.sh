@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# php.ini
+export PATH=$PATH:/var/www/html/bin
+
+### php.ini
 [ ! -z "${PHP_MEMORY_LIMIT}" ] && sed -i "s/PHP_MEMORY_LIMIT/${PHP_MEMORY_LIMIT}/" /usr/local/etc/php/php.ini
 [ ! -z "${PHP_MAXEXECUTION_TIME}" ] && sed -i "s/PHP_MAXEXECUTION_TIME/${PHP_MAXEXECUTION_TIME}/" /usr/local/etc/php/php.ini
 [ ! -z "${PHP_UPLOAD_MAX_FILESIZE}" ] && sed -i "s/PHP_UPLOAD_MAX_FILESIZE/${PHP_UPLOAD_MAX_FILESIZE}/" /usr/local/etc/php/php.ini
@@ -12,7 +14,7 @@
 [ ! -z "${SUHOSIN_SESSION_CRYPTUA}" ] && sed -i "s/SUHOSIN_SESSION_CRYPTUA/${SUHOSIN_SESSION_CRYPTUA}/" /usr/local/etc/php/php.ini
 [ ! -z "${PHP_DISPLAY_ERRORS}" ] && sed -i "s/PHP_DISPLAY_ERRORS/${PHP_DISPLAY_ERRORS}/" /usr/local/etc/php/php.ini
 [ ! -z "${PHP_OPCACHE_REVALIDATE_FREQ}" ] && sed -i "s/PHP_OPCACHE_REVALIDATE_FREQ/${PHP_OPCACHE_REVALIDATE_FREQ}/" /usr/local/etc/php/php.ini
-# www.conf
+### www.conf
 [ ! -z "${WEBSERVER_USER}" ] && sed -i "s/WEBSERVER_USER/${WEBSERVER_USER}/" /usr/local/etc/php-fpm.d/www.conf
 [ ! -z "${PHP_PORT}" ] && sed -i "s/PHP_PORT/${PHP_PORT}/" /usr/local/etc/php-fpm.d/www.conf
 [ ! -z "${PHP_PM_VAR}" ] && sed -i "s/PHP_PM_VAR/${PHP_PM_VAR}/" /usr/local/etc/php-fpm.d/www.conf
@@ -21,9 +23,10 @@
 [ ! -z "${PHP_PM_MIN_SPARE_SERVERS}" ] && sed -i "s/PHP_PM_MIN_SPARE_SERVERS/${PHP_PM_MIN_SPARE_SERVERS}/" /usr/local/etc/php-fpm.d/www.conf
 [ ! -z "${PHP_PM_MAX_SPARE_SERVERS}" ] && sed -i "s/PHP_PM_MAX_SPARE_SERVERS/${PHP_PM_MAX_SPARE_SERVERS}/" /usr/local/etc/php-fpm.d/www.conf
 [ ! -z "${MAGENTO_DEPLOY_MODE}" ] && sed -i "s/MAGENTO_DEPLOY_MODE/${MAGENTO_DEPLOY_MODE}/" /usr/local/etc/php-fpm.d/www.conf
-# nginx.conf
+### nginx.conf
 [ ! -z "${WEBSERVER_USER}" ] && sed -i "s/WEBSERVER_USER/${WEBSERVER_USER}/" /etc/nginx/nginx.conf
-# default.conf
+[ ! -z "${NGINX_WORKER_PROCESSES}" ] && sed -i "s/NGINX_WORKER_PROCESSES/${NGINX_WORKER_PROCESSES}/" /etc/nginx/nginx.conf
+### default.conf
 [ ! -z "${SERVER_NAME}" ] && sed -i "s/SERVER_NAME/${SERVER_NAME}/" /etc/nginx/conf.d/default.conf 
 [ ! -z "${PHP_HOST}" ] && sed -i "s/PHP_HOST/${PHP_HOST}/" /etc/nginx/conf.d/default.conf 
 [ ! -z "${PHP_PORT}" ] && sed -i "s/PHP_PORT/${PHP_PORT}/" /etc/nginx/conf.d/default.conf 
@@ -38,19 +41,17 @@
 [ ! -z "${SSL_CIPHERS}" ] && sed -i "s/SSL_CIPHERS/${SSL_CIPHERS}/" /etc/nginx/conf.d/default.conf
 [ ! -z "${SSL_SESSION_CACHE}" ] && sed -i "s/SSL_SESSION_CACHE/${SSL_SESSION_CACHE}/" /etc/nginx/conf.d/default.conf
 [ ! -z "${SSL_SESSION_TIMEOUT}" ] && sed -i "s/SSL_SESSION_TIMEOUT/${SSL_SESSION_TIMEOUT}/" /etc/nginx/conf.d/default.conf
-# magento.repo
+### magento.repo
 [ ! -z "${MAGENTO_REPO_PUBLIC_KEY}" ] && sed -i "s/MAGENTO_REPO_PUBLIC_KEY/${MAGENTO_REPO_PUBLIC_KEY}/" /root/.composer/auth.json
 [ ! -z "${MAGENTO_REPO_PRIVATE_KEY}" ] && sed -i "s/MAGENTO_REPO_PRIVATE_KEY/${MAGENTO_REPO_PRIVATE_KEY}/" /root/.composer/auth.json
-# pengo.repo
+### pengo.repo
 [ ! -z "${PENGO_REPO_PUBLIC_KEY}" ] && sed -i "s/PENGO_REPO_PUBLIC_KEY/${PENGO_REPO_PUBLIC_KEY}/" /root/.composer/auth.json
-# redis
+### redis
 [ ! -z "${REDIS_MAX_MEMORY}" ] && sed -i "s/REDIS_MAX_MEMORY/${REDIS_MAX_MEMORY}/" /etc/redis/redis.conf
-# varnish
+### varnish
 [ ! -z "${NGINX_PORT}" ] && sed -i "s/NGINX_PORT/${NGINX_PORT}/" /etc/varnish/default.vcl
-# supervisor
+### supervisor
 [ ! -z "${VARNISHD_CACHE_SIZE}" ] && sed -i "s/VARNISHD_CACHE_SIZE/${VARNISHD_CACHE_SIZE}/" /etc/supervisord.conf
 [ ! -z "${VARNISHD_PARAMS}" ] && sed -i "s/VARNISHD_PARAMS/${VARNISHD_PARAMS}/" /etc/supervisord.conf
 
-supervisord -n -c /etc/supervisord.conf
-
-export PATH=$PATH:/var/www/html/bin
+supervisord -n -c /etc/supervisord.conf 

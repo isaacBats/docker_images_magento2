@@ -1,0 +1,43 @@
+web:
+    image: icebrick.pengostores.mx:4567/magento2/images:webdev
+    ports:
+        - 80:80
+    volumes:
+        - ./src:/var/www/html
+        - ./log/nginx:/var/log/nginx
+        - ./log/php:/var/log/php-fpm
+       # - ./log/magento/:/var/www/html/var/log/
+        - ./build:/build/
+    environment:
+        - MAGENTO_DEPLOY_MODE=developer
+        - MAGENTO_BASE_URL=http://magento2dev.pengostores.mx/
+        - MAGENTO_BACKEND_FRONTNAME=admindev
+        - MAGENTO_TIMEZONE=America/Mexico_City
+        - MAGENTO_CURRENCY=MXN
+        - MAGENTO_LANGUAGE=es_MX
+        - MAGENTO_DB_HOST=mysql
+        - MAGENTO_DB_USERNAME=root
+        - MAGENTO_DB_PASSWORD=mysql
+        - MAGENTO_DB_NAME=magento2
+        - MAGENTO_ADMIN_USER=pengo
+        - MAGENTO_ADMIN_PASSWORD=p3ng023#
+        - MAGENTO_ADMIN_EMAIL=svchumboldt@pengostores.com
+    links:
+        - mysql
+    container_name: magento2dev-web
+    restart: always
+
+mysql:
+    image: mysql:5.7
+    volumes:
+        - ./db:/var/lib/mysql
+        - ./build:/build/
+        - ./sql:/docker-entrypoint-initdb.d/
+        - ./log/mysql:/var/log/mysql/
+    ports:
+      - 3306:3306
+    environment:
+        - MYSQL_ROOT_PASSWORD=mysql
+        - MYSQL_DATABASE=magento2
+    container_name: magento2dev-db
+    restart: always

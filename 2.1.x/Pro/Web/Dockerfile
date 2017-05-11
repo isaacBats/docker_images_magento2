@@ -33,6 +33,7 @@ ENV NGINX_FASTCGI_READ_TIMEOUT="300"
 ENV NGINX_CLIENT_MAX_BODY_SIZE="100M"
 ENV NGINX_KEEPALIVE_TIMEOUT="300s"
 ENV NGINX_PORT="8080"
+ENV NGINX_WORKER_PROCESSES="1"
 
 ENV SSL_NAME_CRT="common.crt"
 ENV SSL_NAME_KEY="common.key"
@@ -156,7 +157,7 @@ COPY conf/default.conf /etc/nginx/conf.d/
 COPY conf/redis.conf /etc/redis/redis.conf
 
 # set permisions schema
-RUN chown -R ${WEBSERVER_USER}:${WEBSERVER_USER} /var/www/html
+RUN chown -R root:${WEBSERVER_USER} /var/www/html
 
 # repo.magento
 COPY keys/auth.json /root/.composer/
@@ -173,6 +174,8 @@ RUN chown root /root/.ssh && \
 COPY bin/m2install.sh /root/
 RUN chmod +x /root/m2install.sh
 
+COPY bin/cronjobs.sh /root/
+
 # supervisord config
 RUN rm /etc/supervisor/supervisord.conf
 COPY conf/supervisord.conf /etc/supervisord.conf
@@ -180,7 +183,7 @@ COPY conf/supervisord.conf /etc/supervisord.conf
 # entrypoint
 COPY bin/entrypoint.sh /usr/local/bin/
 
-EXPOSE 22 80 8080 443 9000 6379 5000 44100
+EXPOSE 80 8080 443 9000 6379 44100
 WORKDIR /var/www/html
 USER root
 
