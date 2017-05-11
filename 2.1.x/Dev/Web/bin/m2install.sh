@@ -8,7 +8,7 @@ then
 else
 	echo -e "${COLOR}Obteniendo Magento2..."
 	cd /var/www/html
-	composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition="$MAGENTO_VERSION" ./
+	composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition="MAGENTO_VERSION" ./
 	composer config secure-http false
 	composer config minimum-stability beta
 	composer install
