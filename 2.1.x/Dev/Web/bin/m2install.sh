@@ -23,5 +23,6 @@ else
 	php bin/magento module:enable Pengo_Humboldt
 	php bin/magento setup:upgrade
 	chown www-data:www-data /var/www/html -Rf
+	find . -type d -exec chmod 770 {} \; &&  find . -type f -exec chmod 660 {} \; &&  chmod u+x bin/magento
 	echo -e "${COLOR}Ahora puedes accesar desde $MAGENTO_BASE_URL $MAGENTO_BACKEND_FRONTNAME${NC}"
 fi
