@@ -38,6 +38,7 @@ WORKDIR /tmp
 
 RUN apt-get update && apt-get install -y \
     apt-utils \
+    ssh \
     #sudo \
     wget \
     unzip \
