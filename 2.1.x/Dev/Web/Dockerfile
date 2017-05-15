@@ -51,13 +51,13 @@ RUN apt-get update && apt-get install -y \
     libjpeg62-turbo-dev \
     libexpat1-dev \
     libpng12-dev \
-    #libcurl4-gnutls-dev \
-    #libz-dev \
+    libcurl4-gnutls-dev \
+    libz-dev \
     #libssl-dev \
     build-essential \
-    #tcl8.5 \
+    tcl8.5 \
     gettext \
-    #lsof \
+    lsof \
     vim \
     #openssh-server \
     supervisor \
@@ -147,7 +147,7 @@ COPY conf/supervisord.conf /etc/supervisord.conf
 
 # entrypoint
 COPY bin/entrypoint.sh /usr/local/bin/
-
+    
 EXPOSE 80 44100
 WORKDIR /var/www/html
 USER root
