@@ -14,22 +14,7 @@ web:
         - ./redis:/redis/data
         - ./build:/build/
     environment:
-        - MAGENTO_USER=magento2
-        - MAGENTO_DEPLOY_MODE=developer
-        - MAGENTO_REPO_PUBLIC_KEY=2d6040b5384fca8a83388639194a9030
-        - MAGENTO_REPO_PRIVATE_KEY=63f1690d868495884ab274bcef884f0b
-        - MAGENTO_BASE_URL=http://magento2pro.pengostores.mx/
-        - MAGENTO_BACKEND_FRONTNAME=adminpro
-        - MAGENTO_TIMEZONE=America/Mexico_City
-        - MAGENTO_CURRENCY=MXN
-        - MAGENTO_LANGUAGE=es_MX
-        - MAGENTO_DB_HOST=mysql
-        - MAGENTO_DB_USERNAME=root
-        - MAGENTO_DB_PASSWORD=mysql
-        - MAGENTO_DB_NAME=magento2
-        - MAGENTO_ADMIN_USER=pengo
-        - MAGENTO_ADMIN_PASSWORD=p3ng023#
-        - MAGENTO_ADMIN_EMAIL=svchumboldt@pengostores.com
+        - MAGENTO_DEPLOY_MODE=production
         - PENGO_REPO_PUBLIC_KEY="236573746120657320756e6120636c617665206c6172676123"
         - SERVER_NAME=localhost
         - WEBSERVER_USER=www-data

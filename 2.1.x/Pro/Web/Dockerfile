@@ -5,24 +5,7 @@ MAINTAINER "Pengo Development Team"
 ENV MAGENTO_REPO_PUBLIC_KEY="2d6040b5384fca8a83388639194a9030"
 ENV MAGENTO_REPO_PRIVATE_KEY="63f1690d868495884ab274bcef884f0b"
 
-ENV MAGENTO_USER="magento2"
-ENV MAGENTO_DEPLOY_MODE="developer"
-
-ENV MAGENTO_BASE_URL="http://magento2pro.pengostores.mx/"
-ENV MAGENTO_BACKEND_FRONTNAME="adminpro"
-
-ENV MAGENTO_TIMEZONE="America/Mexico_City"
-ENV MAGENTO_CURRENCY="MXN"
-ENV MAGENTO_LANGUAGE="es_MX"
-
-ENV MAGENTO_DB_HOST="mysql"
-ENV MAGENTO_DB_USERNAME="root"
-ENV MAGENTO_DB_PASSWORD="mysql"
-ENV MAGENTO_DB_NAME="magento2"
-
-ENV MAGENTO_ADMIN_USER="pengo"
-ENV MAGENTO_ADMIN_PASSWORD="p3ng023#"
-ENV MAGENTO_ADMIN_EMAIL="svchumboldt@pengostores.com"
+ENV MAGENTO_DEPLOY_MODE="production"
 
 ENV PENGO_REPO_PUBLIC_KEY="236573746120657320756e6120636c617665206c6172676123"
 
@@ -172,8 +155,6 @@ RUN chown root /root/.ssh && \
    chmod 600 /root/.ssh/id_rsa && \
    chmod 644 /root/.ssh/id_rsa.pub  && \
    chmod 600 /root/.ssh/known_hosts
-COPY bin/m2install.sh /root/
-RUN chmod +x /root/m2install.sh
 
 COPY bin/cronjobs.sh /root/
 
