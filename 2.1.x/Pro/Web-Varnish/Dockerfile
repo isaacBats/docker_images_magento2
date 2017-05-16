@@ -47,6 +47,9 @@ ENV SUHOSIN_SESSION_CRYPTUA="off"
 
 ENV REDIS_MAX_MEMORY="# maxmemory <bytes>"
 
+ENV VARNISHD_CACHE_SIZE="512G"
+ENV VARNISHD_PARAMS="-p default_ttl=3600 -p default_grace=3600"
+
 WORKDIR /tmp
 
 RUN apt-get update && apt-get install -y \
@@ -119,6 +122,10 @@ RUN wget http://download.redis.io/redis-stable.tar.gz \
     && cd redis-stable \
     && make && make test && make install \
     && mkdir -p /redis/data
+
+## Varnish
+RUN apt-get update && RUNLEVEL=1 apt-get install -y varnish && rm /etc/varnish/default.vcl
+COPY conf/default.vcl /etc/varnish/
      
 # PHP config
 COPY conf/php.ini /usr/local/etc/php/
