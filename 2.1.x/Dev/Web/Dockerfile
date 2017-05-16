@@ -39,7 +39,6 @@ WORKDIR /tmp
 RUN apt-get update && apt-get install -y \
     apt-utils \
     ssh \
-    #sudo \
     wget \
     unzip \
     cron \
@@ -54,17 +53,16 @@ RUN apt-get update && apt-get install -y \
     libpng12-dev \
     libcurl4-gnutls-dev \
     libz-dev \
-    #libssl-dev \
+    libssl-dev \
     build-essential \
     tcl8.5 \
     gettext \
     lsof \
     vim \
-    #openssh-server \
     supervisor \
     mysql-client \
-    #ocaml \
-    #expect \
+    ocaml \
+    expect \
     librabbitmq-dev \
     erlang-nox \
     logrotate \
