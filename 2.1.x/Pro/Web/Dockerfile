@@ -148,6 +148,8 @@ RUN chown root /root/.ssh && \
    chmod 600 /root/.ssh/id_rsa && \
    chmod 644 /root/.ssh/id_rsa.pub  && \
    chmod 600 /root/.ssh/known_hosts
+COPY bin/m2install.sh /root/
+RUN chmod +x /root/m2install.sh
 
 COPY bin/cronjobs.sh /root/
 

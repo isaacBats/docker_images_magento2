@@ -13,7 +13,20 @@ web:
         - ./redis:/redis/data
         - ./build:/build/
     environment:
-        - MAGENTO_DEPLOY_MODE=production
+        - MAGENTO_VERSION="2.1.6"
+	- MAGENTO_DEPLOY_MODE=production
+	- MAGENTO_BASE_URL=http://magento2dev.pengostores.mx/
+	- MAGENTO_BACKEND_FRONTNAME=admindev
+	- MAGENTO_TIMEZONE=America/Mexico_City
+	- MAGENTO_CURRENCY=MXN
+        - MAGENTO_LANGUAGE=es_MX
+        - MAGENTO_DB_HOST=mysql
+        - MAGENTO_DB_USERNAME=root
+        - MAGENTO_DB_PASSWORD=mysql
+        - MAGENTO_DB_NAME=magento2
+        - MAGENTO_ADMIN_USER=pengo
+        - MAGENTO_ADMIN_PASSWORD=p3ng023#
+        - MAGENTO_ADMIN_EMAIL=svchumboldt@pengostores.com
         - PENGO_REPO_PUBLIC_KEY="236573746120657320756e6120636c617665206c6172676123"
         - SERVER_NAME=localhost
         - WEBSERVER_USER=www-data
