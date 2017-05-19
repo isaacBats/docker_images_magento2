@@ -1,7 +1,7 @@
 web:
     image: icebrick.pengostores.mx:4567/magento2/images:webpro
     ports:
-        - 82:80
+        - 80:80
         - 443:443
     volumes:
         - ./src:/var/www/html
