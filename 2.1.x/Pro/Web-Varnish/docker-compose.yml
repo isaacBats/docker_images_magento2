@@ -15,8 +15,8 @@ web:
         - ./build:/build/
     environment:
         - MAGENTO_VERSION="2.1.6"
-	- MAGENTO_DEPLOY_MODE=default
-	- MAGENTO_BASE_URL=http://magento2pro.pengostores.mx/
+	    - MAGENTO_DEPLOY_MODE=default
+	    - MAGENTO_BASE_URL=http://magento2pro.pengostores.mx/
         - MAGENTO_BACKEND_FRONTNAME=adminpro
         - MAGENTO_TIMEZONE=America/Mexico_City
         - MAGENTO_CURRENCY=MXN

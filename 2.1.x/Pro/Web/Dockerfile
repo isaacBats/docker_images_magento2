@@ -5,9 +5,24 @@ MAINTAINER "Pengo Development Team"
 ENV MAGENTO_REPO_PUBLIC_KEY="2d6040b5384fca8a83388639194a9030"
 ENV MAGENTO_REPO_PRIVATE_KEY="63f1690d868495884ab274bcef884f0b"
 
-ENV MAGENTO_DEPLOY_MODE="production"
-
 ENV PENGO_REPO_PUBLIC_KEY="236573746120657320756e6120636c617665206c6172676123"
+
+ENV MAGENTO_VERSION="2.1.6"
+ENV MAGENTO_DEPLOY_MODE="production"
+ENV MAGENTO_REPO_PUBLIC_KEY="2d6040b5384fca8a83388639194a9030"
+ENV MAGENTO_REPO_PRIVATE_KEY="63f1690d868495884ab274bcef884f0b"
+ENV MAGENTO_BASE_URL="http://magento2pro.pengostores.mx/"
+ENV MAGENTO_BACKEND_FRONTNAME="adminpro"
+ENV MAGENTO_TIMEZONE="America/Mexico_City"
+ENV MAGENTO_CURRENCY="MXN"
+ENV MAGENTO_LANGUAGE="es_MX"
+ENV MAGENTO_DB_HOST="mysql"
+ENV MAGENTO_DB_USERNAME="root"
+ENV MAGENTO_DB_PASSWORD="mysql"
+ENV MAGENTO_DB_NAME="magento2"
+ENV MAGENTO_ADMIN_USER="pengo"
+ENV MAGENTO_ADMIN_PASSWORD="p3ng023#"
+ENV MAGENTO_ADMIN_EMAIL="svchumboldt@pengostores.com"
 
 ENV SERVER_NAME="localhost"
 ENV WEBSERVER_USER="www-data"
@@ -85,7 +100,6 @@ RUN apt-get update && apt-get install -y \
     net-tools \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir /build/ \
-    
     
 ## PHP
 && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
