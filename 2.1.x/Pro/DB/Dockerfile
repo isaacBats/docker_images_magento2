@@ -4,7 +4,6 @@ MAINTAINER "Pengo Development Team"
 
 ENV MYSQL_INNODB_BUFFER_POOL_SIZE="134217728"
 ENV MYSQL_INNODB_THREAD_CONCURRENCY="0"
-#ENV MYSQL_THREAD_CONCURRENCY="one-thread-per-connection"
 
 RUN rm -rf /etc/mysql/conf.d/* && \
     rm -rf /etc/mysql/mysql.conf.d/* && \
