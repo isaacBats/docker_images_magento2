@@ -17,6 +17,7 @@ else
 	echo -e "${COLOR}Instalando Humboldt..."
 	composer config repositories.humboldt composer http://staging.pengostores.mx:5000
 	composer require pengo/humboldt
+	composer require pengo/backendtheme
 	cp /root/.composer/auth.json ./auth.json
 	chown root:www-data /var/www/html -Rf
 	echo -e "${COLOR}Activando Humboldt..."
