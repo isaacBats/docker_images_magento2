@@ -20,12 +20,11 @@ else
 	composer config repositories.humboldt composer http://staging.pengostores.mx:5000
 	composer require pengo/humboldt
 	composer require pengo/backendtheme
-	#cp /root/.composer/auth.json ./auth.json
+	cp /root/.composer/auth.json ./auth.json
 	chown root:www-data /var/www/html -Rf
 	echo -e "${COLOR}Activando Humboldt..."
 	php bin/magento module:enable Pengo_Humboldt
 	php bin/magento setup:upgrade
-	#php bin/magento setup:di:compile
 	find . -type d -exec chmod 770 {} \; &&  find . -type f -exec chmod 660 {} \; &&  chmod u+x bin/magento
 	chown root:www-data /var/www/html -Rf
 	chown www-data:www-data /var/www/html/var -Rf
