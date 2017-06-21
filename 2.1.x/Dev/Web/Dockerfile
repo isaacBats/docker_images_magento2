@@ -17,6 +17,8 @@ ENV PHP_POST_MAX_SIZE="100M"
 ENV PHP_MAX_IMPUT_VARS="5000"
 ENV PHP_DISPLAY_ERRORS="On"
 
+ENV MAGENTO_USER="magento2"
+ENV MAGENTO_VERSION="project-community-edition=2.1.6"
 ENV MAGENTO_REPO_PUBLIC_KEY="2d6040b5384fca8a83388639194a9030"
 ENV MAGENTO_REPO_PRIVATE_KEY="63f1690d868495884ab274bcef884f0b"
 ENV MAGENTO_DEPLOY_MODE="developer"
@@ -32,7 +34,6 @@ ENV MAGENTO_DB_NAME="magento2"
 ENV MAGENTO_ADMIN_USER="pengo"
 ENV MAGENTO_ADMIN_PASSWORD="p3ng023#"
 ENV MAGENTO_ADMIN_EMAIL="svchumboldt@pengostores.com"
-ENV MAGENTO_VERSION="2.1.6"
 
 WORKDIR /tmp
 
@@ -120,27 +121,27 @@ COPY conf/www.conf /usr/local/etc/php-fpm.d/
 COPY conf/nginx.conf /etc/nginx/
 COPY conf/default.conf /etc/nginx/conf.d/
 
-# set permisions schema
-RUN chown -R root:${WEBSERVER_USER} /var/www/html
+# create magento2 user
+RUN useradd -m -d /home/${MAGENTO_USER} -s /bin/bash ${MAGENTO_USER} && usermod -g www-data ${MAGENTO_USER} && usermod -aG sudo ${MAGENTO_USER}
 
 # repo.magento
-COPY keys/auth.json /root/.composer/
+COPY keys/auth.json /home/${MAGENTO_USER}/.composer/
 
 # icebrick
-RUN mkdir /root/.ssh
-COPY keys/id_rsa /root/.ssh
-COPY keys/id_rsa.pub /root/.ssh
-COPY keys/known_hosts /root/.ssh
-RUN chown root /root/.ssh && \
-   chmod 600 /root/.ssh/id_rsa && \
-   chmod 644 /root/.ssh/id_rsa.pub  && \
-   chmod 600 /root/.ssh/known_hosts
-COPY bin/m2install.sh /root/
-COPY bin/composer_update /root/
-COPY bin/composer_update.sh /root/
-RUN chmod +x /root/m2install.sh
+RUN mkdir /home/${MAGENTO_USER}/.ssh
+COPY keys/id_rsa /home/${MAGENTO_USER}/.ssh
+COPY keys/id_rsa.pub /home/${MAGENTO_USER}/.ssh
+COPY keys/known_hosts /home/${MAGENTO_USER}/.ssh
+RUN chown ${MAGENTO_USER} /home/${MAGENTO_USER}/.ssh && \
+   chmod 600 /home/${MAGENTO_USER}/.ssh/id_rsa && \
+   chmod 644 /home/${MAGENTO_USER}/.ssh/id_rsa.pub  && \
+   chmod 600 /home/${MAGENTO_USER}/.ssh/known_hosts
+COPY bin/m2install.sh /home/${MAGENTO_USER}/
+COPY bin/composer_update /home/${MAGENTO_USER}/
+COPY bin/composer_update.sh /home/${MAGENTO_USER}/
+RUN chmod +x /home/${MAGENTO_USER}/m2install.sh
 
-COPY bin/cronjobs.sh /root/
+COPY bin/cronjobs.sh /home/${MAGENTO_USER}/
 
 # supervisord config
 RUN rm /etc/supervisor/supervisord.conf

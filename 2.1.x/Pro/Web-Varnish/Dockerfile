@@ -7,6 +7,7 @@ ENV MAGENTO_REPO_PRIVATE_KEY="63f1690d868495884ab274bcef884f0b"
 
 ENV PENGO_REPO_PUBLIC_KEY="236573746120657320756e6120636c617665206c6172676123"
 
+ENV MAGENTO_USER="magento2"
 ENV MAGENTO_VERSION="2.1.6"
 ENV MAGENTO_DEPLOY_MODE="production"
 ENV MAGENTO_REPO_PUBLIC_KEY="2d6040b5384fca8a83388639194a9030"
@@ -103,8 +104,7 @@ RUN apt-get update && apt-get install -y \
     net-tools \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir /build/ \
-    
-    
+
 ## PHP
 && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
 && docker-php-ext-configure hash --with-mhash \

@@ -6,10 +6,11 @@ web:
         - ./src:/var/www/html
         - ./log/nginx:/var/log/nginx
         - ./log/php:/var/log/php-fpm
-       # - ./log/magento/:/var/www/html/var/log/
         - ./build:/build/
+       # - ./log/magento/:/var/www/html/var/log/
     environment:
-        - MAGENTO_VERSION="2.1.6"
+        - MAGENTO_USER=magento2
+        - MAGENTO_VERSION=project-community-edition=2.1.7
         - MAGENTO_DEPLOY_MODE=developer
         - MAGENTO_BASE_URL=http://magento2dev.pengostores.mx/
         - MAGENTO_BACKEND_FRONTNAME=admindev
