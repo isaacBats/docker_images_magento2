@@ -1,115 +1,102 @@
-FROM ubuntu:16.04
+FROM php:7.0.12-fpm
+MAINTAINER "Magento"
 
-MAINTAINER "Pengo Development Team"
+ENV PHP_EXTRA_CONFIGURE_ARGS="--enable-fpm --with-fpm-user=magento2 --with-fpm-group=magento2"
 
-ENV PENGO_REPO_PUBLIC_KEY="236573746120657320756e6120636c617665206c6172676123"
-
-ENV SERVER_NAME="localhost"
-ENV WEBSERVER_USER="www-data"
-
-ENV PHP_EXTRA_CONFIGURE_ARGS="--enable-fpm --with-fpm-user=${WEBSERVER_USER} --with-fpm-group=${WEBSERVER_USER}"
-ENV PHP_HOST="127.0.0.1"
-ENV PHP_PORT="9000"
-ENV PHP_MEMORY_LIMIT="2G"
-ENV PHP_MAXEXECUTION_TIME="18000"
-ENV PHP_UPLOAD_MAX_FILESIZE="100M"
-ENV PHP_POST_MAX_SIZE="100M"
-ENV PHP_MAX_IMPUT_VARS="5000"
-ENV PHP_DISPLAY_ERRORS="On"
-
-ENV MAGENTO_USER="magento2"
-ENV MAGENTO_VERSION="project-community-edition=2.1.6"
-ENV MAGENTO_REPO_PUBLIC_KEY="2d6040b5384fca8a83388639194a9030"
-ENV MAGENTO_REPO_PRIVATE_KEY="63f1690d868495884ab274bcef884f0b"
-ENV MAGENTO_DEPLOY_MODE="developer"
-ENV MAGENTO_BASE_URL="http://magento2dev.pengostores.mx/"
-ENV MAGENTO_BACKEND_FRONTNAME="admindev"
-ENV MAGENTO_TIMEZONE="America/Mexico_City"
-ENV MAGENTO_CURRENCY="MXN"
-ENV MAGENTO_LANGUAGE="es_MX"
-ENV MAGENTO_DB_HOST="mysql"
-ENV MAGENTO_DB_USERNAME="root"
-ENV MAGENTO_DB_PASSWORD="mysql"
-ENV MAGENTO_DB_NAME="magento2"
-ENV MAGENTO_ADMIN_USER="pengo"
-ENV MAGENTO_ADMIN_PASSWORD="p3ng023#"
-ENV MAGENTO_ADMIN_EMAIL="svchumboldt@pengostores.com"
-
-WORKDIR /tmp
-
-RUN apt-get update && \
-    apt-get dist-upgrade -y && \
-    apt-get install -y \
-    git \
-    apache2 \
-    php7.0 \
-    php7.0-cli \
-    php7.0-fpm \
-    libapache2-mod-php7.0 \
-    libapache2-mod-fastcgi \
-    php7.0-gd \
-    php7.0-json \
-    php7.0-ldap \
-    php7.0-mbstring \
-    php7.0-mysql \
-    php7.0-pdo \
-    php7.0-pgsql \
-    php7.0-sqlite3 \
-    php7.0-xml \
-    php7.0-xsl \
-    php7.0-zip \
-    php7.0-soap \
-    php7.0-curl \
-    php7.0-intl \
-    php-pear \
-    php-imagick \
-    php7.0-imap \
-    php7.0-mcrypt \
-    php-memcache  \
-    php7.0-pspell \
-    php7.0-recode \
-    php7.0-sqlite3 \
-    php7.0-tidy \
-    php7.0-xmlrpc \
-    php7.0-xsl \
-    php-gettext \
-    ssh \
+RUN apt-get update && apt-get install -y \
+    apt-utils \
+    sudo \
     wget \
     unzip \
     cron \
     curl \
     libmcrypt-dev \
     libicu-dev \
-    libxml2-dev \
-    libxslt1-dev \
+    libxml2-dev libxslt1-dev \
     libfreetype6-dev \
-    libexpat1-dev \
+    libjpeg62-turbo-dev \
     libpng12-dev \
-    libcurl4-gnutls-dev \
-    libz-dev \
-    libssl-dev \
-    build-essential \
-    tcl8.5 \
-    gettext \
-    lsof \
+    git \
     vim \
+    openssh-server \
     supervisor \
     mysql-client \
     ocaml \
-    expect \
-    librabbitmq-dev \
-    erlang-nox \
-    logrotate \
-    socat \
-    nodejs \
-    npm \
-    && rm -rf /var/lib/apt/lists/* \
-    && mkdir /build/ \
-    && a2enmod actions fastcgi alias \
-## Composer
+    expect
+
+RUN curl -L https://github.com/bcpierce00/unison/archive/2.48.4.tar.gz | tar zxv -C /tmp && \
+             cd /tmp/unison-2.48.4 && \
+             sed -i -e 's/GLIBC_SUPPORT_INOTIFY 0/GLIBC_SUPPORT_INOTIFY 1/' src/fsmonitor/linux/inotify_stubs.c && \
+             make && \
+             cp src/unison src/unison-fsmonitor /usr/local/bin && \
+             cd /root && rm -rf /tmp/unison-2.48.4 \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure hash --with-mhash \
+    && docker-php-ext-install -j$(nproc) mcrypt intl xsl gd zip pdo_mysql opcache soap bcmath json iconv \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && rm -rf /usr/local/etc/php-fpm.d/* 
-           
+    && pecl install xdebug && docker-php-ext-enable xdebug \
+    && echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_connect_back=0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_host=127.0.0.1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.max_nesting_level=1000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && chmod 666 /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && mkdir /var/run/sshd \
+    && apt-get clean && apt-get update && apt-get install -y nodejs \
+    && ln -s /usr/bin/nodejs /usr/bin/node \
+    && apt-get install -y npm \
+    && npm update -g npm && npm install -g grunt-cli && npm install -g gulp \
+    && echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config \
+    && apt-get install -y apache2 \
+    && a2enmod rewrite \
+    && a2enmod proxy \
+    && a2enmod proxy_fcgi \
+    && rm -f /etc/apache2/sites-enabled/000-default.conf \
+    && useradd -m -d /home/magento2 -s /bin/bash magento2 && adduser magento2 sudo \
+    && touch /etc/sudoers.d/privacy \
+    && echo "Defaults        lecture = never" >> /etc/sudoers.d/privacy \
+    && mkdir /home/magento2/magento2 && mkdir /var/www/magento2 \
+    && mkdir /home/magento2/state \
+    && curl -sS https://accounts.magento.cloud/cli/installer -o /home/magento2/installer \
+    && rm -r /usr/local/etc/php-fpm.d/* \
+    && sed -i 's/www-data/magento2/g' /etc/apache2/envvars
+
+# PHP config
+ADD conf/php.ini /usr/local/etc/php
+
+# SSH config
+COPY conf/sshd_config /etc/ssh/sshd_config
+RUN chown magento2:magento2 /etc/ssh/ssh_config
+
+# supervisord config
+ADD conf/supervisord.conf /etc/supervisord.conf
+
+# php-fpm config
+ADD conf/php-fpm-magento2.conf /usr/local/etc/php-fpm.d/php-fpm-magento2.conf
+
+# apache config
+ADD conf/apache-default.conf /etc/apache2/sites-enabled/apache-default.conf
+
+# unison script
+ADD conf/.unison/magento2.prf /home/magento2/.unison/magento2.prf
+
+ADD conf/unison.sh /usr/local/bin/unison.sh
+ADD conf/entrypoint.sh /usr/local/bin/entrypoint.sh
+ADD conf/check-unison.sh /usr/local/bin/check-unison.sh
+RUN chmod +x /usr/local/bin/unison.sh && chmod +x /usr/local/bin/entrypoint.sh \
+    && chmod +x /usr/local/bin/check-unison.sh
+
+ENV PATH $PATH:/var/www/magento2/bin
+
+ENV USE_SHARED_WEBROOT 1
+ENV SHARED_CODE_PATH /var/www/magento2
+ENV WEBROOT_PATH /var/www/magento2
+ENV MAGENTO_ENABLE_SYNC_MARKER 0
+
+## Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 ## Grunt
 WORKDIR /tmp/grunt
 RUN curl -sL https://deb.nodesource.com/setup | bash -
@@ -117,48 +104,30 @@ RUN apt-get update \
     && apt-get install -y build-essential nodejs
 RUN npm install -g express \
     && npm install -g grunt-cli
-         
-# PHP config
-COPY conf/php.ini /usr/local/etc/php/
-
-# php-fpm config
-COPY conf/www.conf /usr/local/etc/php-fpm.d/
-
-# nginx config
-COPY conf/nginx.conf /etc/nginx/
-COPY conf/default.conf /etc/nginx/conf.d/
-
-# create magento2 user
-RUN useradd -m -d /home/${MAGENTO_USER} -s /bin/bash ${MAGENTO_USER} && usermod -g www-data ${MAGENTO_USER} && usermod -aG sudo ${MAGENTO_USER}
-
-# repo.magento
-COPY keys/auth.json /home/${MAGENTO_USER}/.composer/
 
 # icebrick
-RUN mkdir /home/${MAGENTO_USER}/.ssh
-COPY keys/id_rsa /home/${MAGENTO_USER}/.ssh
-COPY keys/id_rsa.pub /home/${MAGENTO_USER}/.ssh
-COPY keys/known_hosts /home/${MAGENTO_USER}/.ssh
-RUN chown ${MAGENTO_USER} /home/${MAGENTO_USER}/.ssh && \
-   chmod 600 /home/${MAGENTO_USER}/.ssh/id_rsa && \
-   chmod 644 /home/${MAGENTO_USER}/.ssh/id_rsa.pub  && \
-   chmod 600 /home/${MAGENTO_USER}/.ssh/known_hosts
-COPY bin/m2install.sh /home/${MAGENTO_USER}/
-COPY bin/composer_update /home/${MAGENTO_USER}/
-COPY bin/composer_update.sh /home/${MAGENTO_USER}/
-RUN chmod +x /home/${MAGENTO_USER}/m2install.sh
+RUN mkdir /home/magento2/.ssh
+COPY keys/id_rsa /home/magento2/.ssh
+COPY keys/id_rsa.pub /home/magento2/.ssh
+COPY keys/known_hosts /home/magento2/.ssh
+RUN chown magento2 /home/magento2/.ssh && \
+   chmod 600 /home/magento2/.ssh/id_rsa && \
+   chmod 644 /home/magento2/.ssh/id_rsa.pub  && \
+   chmod 600 /home/magento2/.ssh/known_hosts
+COPY bin/m2install.sh /home/magento2/
+COPY bin/composer_update /home/magento2/
+COPY bin/composer_update.sh /home/magento2/
 
-COPY bin/cronjobs.sh /home/${MAGENTO_USER}/
 
-# supervisord config
-RUN rm /etc/supervisor/supervisord.conf
-COPY conf/supervisord.conf /etc/supervisord.conf
+RUN chown -R magento2:magento2 /home/magento2 && \
+    chown -R magento2:magento2 /var/www/html
 
-# entrypoint
-COPY bin/entrypoint.sh /usr/local/bin/
-    
-EXPOSE 80 44100
+# Delete user password to connect with ssh with empty password
+RUN passwd magento2 -d
+
+EXPOSE 80 22 5000 44100
 WORKDIR /var/www/html
+
 USER root
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
