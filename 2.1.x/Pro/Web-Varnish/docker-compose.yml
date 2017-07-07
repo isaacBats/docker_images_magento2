@@ -62,6 +62,7 @@ web:
         - SSL_SESSION_CACHE=shared:SSL:10m
         - SSL_SESSION_TIMEOUT=24h
         - REDIS_MAX_MEMORY=#    
+        - VARNISHD_PORT=80      
         - VARNISHD_CACHE_SIZE=512M      
         - VARNISHD_PARAMS=-p default_ttl=3600 -p default_grace=3600   
     links:

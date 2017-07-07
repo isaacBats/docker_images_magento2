@@ -52,6 +52,7 @@ export PATH=$PATH:/var/www/html/bin
 ### varnish
 [ ! -z "${NGINX_PORT}" ] && sed -i "s/NGINX_PORT/${NGINX_PORT}/" /etc/varnish/default.vcl
 ### supervisor
+[ ! -z "${VARNISHD_PORT}" ] && sed -i "s/VARNISHD_PORT/${VARNISHD_PORT}/" /etc/supervisord.conf
 [ ! -z "${VARNISHD_CACHE_SIZE}" ] && sed -i "s/VARNISHD_CACHE_SIZE/${VARNISHD_CACHE_SIZE}/" /etc/supervisord.conf
 [ ! -z "${VARNISHD_PARAMS}" ] && sed -i "s/VARNISHD_PARAMS/${VARNISHD_PARAMS}/" /etc/supervisord.conf
 
