@@ -11,7 +11,7 @@ web:
     environment:
         - MAGENTO_USER=magento2
         - MAGENTO_VERSION=project-community-edition=2.1.7
-        - MAGENTO_DEPLOY_MODE=developer
+        - MAGENTO_DEPLOY_MODE=default
         - MAGENTO_BASE_URL=http://magento2dev.pengostores.mx/
         - MAGENTO_BACKEND_FRONTNAME=admindev
         - MAGENTO_TIMEZONE=America/Mexico_City
