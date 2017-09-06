@@ -84,7 +84,7 @@ RUN apt-get update && apt-get install -y \
 ## Pestle
 RUN cd /tmp && curl -LO http://pestle.pulsestorm.net/pestle.phar \
     && mv pestle.phar /usr/local/bin/pestle \
-    && chmod u+x /usr/local/bin/pestle
+    && chmod 755 /usr/local/bin/pestle
 
 ## Xdebug
 RUN cd /tmp && wget -c "http://xdebug.org/files/xdebug-2.5.0.tgz" \
