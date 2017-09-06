@@ -79,7 +79,12 @@ RUN apt-get update && apt-get install -y \
     
 ## Composer
 && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-&& rm -rf /usr/local/etc/php-fpm.d/* 
+&& rm -rf /usr/local/etc/php-fpm.d/*
+
+## Pestle
+RUN cd /tmp && curl -LO http://pestle.pulsestorm.net/pestle.phar \
+    && mv pestle.phar /usr/local/bin/pestle \
+    && chmod u+x /usr/local/bin/pestle
 
 ## Xdebug
 RUN cd /tmp && wget -c "http://xdebug.org/files/xdebug-2.5.0.tgz" \
@@ -149,6 +154,9 @@ COPY conf/supervisord.conf /etc/supervisord.conf
 
 # entrypoint
 COPY bin/entrypoint.sh /usr/local/bin/
+
+# utils
+COPY utils/.bash_aliases /home/${MAGENTO_USER}/
     
 EXPOSE 80 44100
 WORKDIR /var/www/html
