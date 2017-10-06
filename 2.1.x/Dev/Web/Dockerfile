@@ -79,25 +79,25 @@ RUN apt-get update && apt-get install -y \
     
 ## Composer
 && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-&& rm -rf /usr/local/etc/php-fpm.d/*
+&& rm -rf /usr/local/etc/php-fpm.d/* \
 
 ## Pestle
-RUN cd /tmp && curl -LO http://pestle.pulsestorm.net/pestle.phar \
-    && mv pestle.phar /usr/local/bin/pestle \
-    && chmod 755 /usr/local/bin/pestle
+&& cd /tmp && curl -LO http://pestle.pulsestorm.net/pestle.phar \
+&& mv pestle.phar /usr/local/bin/pestle \
+&& chmod 755 /usr/local/bin/pestle \
 
 ## Xdebug
-RUN cd /tmp && wget -c "http://xdebug.org/files/xdebug-2.5.0.tgz" \
-    && tar -xf xdebug-2.5.0.tgz \
-    && cd xdebug-2.5.0 \
-    && phpize \
-    && ./configure \
-    && make && make install
+&& cd /tmp && wget -c "http://xdebug.org/files/xdebug-2.5.0.tgz" \
+&& tar -xf xdebug-2.5.0.tgz \
+&& cd xdebug-2.5.0 \
+&& phpize \
+&& ./configure \
+&& make && make install \
            
 ## Git
-RUN cd /tmp && wget https://www.kernel.org/pub/software/scm/git/git-2.9.2.tar.gz
-RUN tar -xzf git-2.9.2.tar.gz
-RUN cd /tmp/git-2.9.2 && make configure && ./configure --prefix=/usr/local && make install
+&& cd /tmp && wget https://www.kernel.org/pub/software/scm/git/git-2.9.2.tar.gz \
+&& tar -xzf git-2.9.2.tar.gz \
+&& cd /tmp/git-2.9.2 && make configure && ./configure --prefix=/usr/local && make install
     
 ## Nginx
 COPY keys/nginx_signing.key /tmp/
@@ -110,11 +110,11 @@ RUN echo "deb http://nginx.org/packages/mainline/debian/ jessie nginx" >> /etc/a
 
 ## Grunt
 WORKDIR /tmp/grunt
-RUN curl -sL https://deb.nodesource.com/setup | bash -
-RUN apt-get update \
-    && apt-get install -y build-essential nodejs
-RUN npm install -g express \
-    && npm install -g grunt-cli
+RUN curl -sL https://deb.nodesource.com/setup | bash - \
+&& apt-get update \
+&& apt-get install -y build-essential nodejs \
+&& npm install -g express \
+&& npm install -g grunt-cli
          
 # PHP config
 COPY conf/php.ini /usr/local/etc/php/
@@ -160,6 +160,6 @@ COPY utils/.bash_aliases /home/${MAGENTO_USER}/
     
 EXPOSE 80 44100
 WORKDIR /var/www/html
-USER root
+# USER root
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
