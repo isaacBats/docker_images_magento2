@@ -103,7 +103,7 @@ RUN apt-get update && apt-get install -y \
 COPY keys/nginx_signing.key /tmp/
 RUN echo "deb http://nginx.org/packages/mainline/debian/ jessie nginx" >> /etc/apt/sources.list \
     && echo "deb-src http://nginx.org/packages/mainline/debian/ jessie nginx" >> /etc/apt/sources.list \
-    && apt-key add nginx_signing.key && apt-get clean && apt-get install -y nginx \
+    && apt-key add nginx_signing.key && apt-get clean && apt-get update && apt-get install -y nginx \
     && mkdir -p /etc/nginx/sites-available/ \ 
     && rm /etc/nginx/nginx.conf \
     && rm /etc/nginx/conf.d/default.conf
