@@ -12,4 +12,13 @@ elif [ -f /usr/local/bin/pestle ]; then
 fi
 
 # github
-alias glp='git log --oneline --graph --all'
+alias gc='git checkout'
+alias gst='git status'
+alias gcb='git checkout -b'
+alias gcmma='git commit -am'
+alias gcmm='git commit -m'
+alias gst='git status'
+alias gbc='git branch'
+alias gpuo='git pull origin'
+alias gpuso='git push origin'
+alias glp='git log --all --oneline --graph'
