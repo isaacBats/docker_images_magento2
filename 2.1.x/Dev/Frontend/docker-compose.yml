@@ -43,4 +43,4 @@ mysql:
         - MYSQL_ROOT_PASSWORD=mysql
         - MYSQL_DATABASE=magento2
     container_name: magento2dev-db
-    restart: always
+    #restart: always
