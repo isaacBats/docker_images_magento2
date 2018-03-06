@@ -28,7 +28,7 @@ web:
     links:
         - mysql
     container_name: magento2dev-web
-    restart: always
+    #restart: always
 
 mysql:
     image: mysql:5.7
