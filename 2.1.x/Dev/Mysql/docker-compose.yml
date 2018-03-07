@@ -1,0 +1,14 @@
+mysql:
+    image: icebrick.pengostores.mx:4567/magento2/images:mysql_v1.0.0
+    volumes:
+        - ./db:/var/lib/mysql
+        - ./build:/home/userapp/build/
+        - ./sql:/docker-entrypoint-initdb.d/
+        - ./log/mysql:/var/log/mysql/
+    ports:
+      - 3307:3306
+    environment:
+        - MYSQL_ROOT_PASSWORD=mysql
+        - MYSQL_DATABASE=magento2
+    container_name: magento2dev-db
+    restart: always
