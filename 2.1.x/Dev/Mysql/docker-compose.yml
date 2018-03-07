@@ -1,5 +1,5 @@
 mysql:
-    image: icebrick.pengostores.mx:4567/magento2/images:mysql_v1.0.0
+    image: icebrick.pengostores.mx:4567/magento2/images:mysql_v1.0.1
     volumes:
         - ./db:/var/lib/mysql
         - ./build:/home/userapp/build/
